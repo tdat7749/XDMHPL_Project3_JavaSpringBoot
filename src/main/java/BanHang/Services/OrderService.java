@@ -62,6 +62,6 @@ public class OrderService implements IOrderService {
             _vegetableService.UpdateAmount(order.getOrderDetailDtos());
         }
 
-        return newOrder;
+        return checkOrder;
     }
 }
