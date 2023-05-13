@@ -3,9 +3,9 @@ package BanHang.Services;
 import org.springframework.stereotype.Service;
 
 import BanHang.DataBinding.OrderDTO;
-import BanHang.Entities.Order;
+import BanHang.ViewModel.JsonResponse;
 
 @Service
 public interface IOrderService {
-    Order createOrder(OrderDTO order);
+    JsonResponse createOrder(OrderDTO order);
 }

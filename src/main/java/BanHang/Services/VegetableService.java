@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 
 /**
@@ -93,7 +94,7 @@ public class VegetableService implements IVegetableService {
     @Override
     @Transactional
     @Modifying
-    public Boolean UpdateAmount(List<OrderDetailDTO> orderDetailDTOs) {
+    public Boolean UpdateAmount(Collection<OrderDetailDTO> orderDetailDTOs) {
         for (OrderDetailDTO item : orderDetailDTOs) {
             // Boolean checkUpdate = _vegetableRepository.UpdateAmount(item.getQuantity(),
             // item.getVegetableId());
@@ -102,6 +103,7 @@ public class VegetableService implements IVegetableService {
                 return false;
             }
             vegetable.setAmount(vegetable.getAmount() - item.getQuantity());
+            vegetable.setSold(vegetable.getSold() + item.getQuantity());
             _vegetableRepository.save(vegetable);
         }
         return true;

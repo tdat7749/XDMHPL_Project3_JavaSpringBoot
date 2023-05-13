@@ -10,6 +10,8 @@ import BanHang.Entities.Vegetable;
 import BanHang.ViewModel.VegetableVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,5 +32,5 @@ public interface IVegetableService {
 
     public List<Vegetable> GetFilterVegetable(FilterVegetableDTO filter);
 
-    Boolean UpdateAmount(List<OrderDetailDTO> orderDetailDTOs);
+    Boolean UpdateAmount(Collection<OrderDetailDTO> orderDetailDTOs);
 }

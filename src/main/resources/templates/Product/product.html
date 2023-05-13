@@ -123,11 +123,6 @@
 <script>
     $("#btnCart").click(function (e) {
         e.preventDefault()
-        let cartData = JSON.parse(localStorage.getItem("detailCart"))
-        if (cartData === null) {
-            localStorage.setItem("detailCart", JSON.stringify([]))
-            cartData = []
-        }
 
         if (Number($("#quantity").val()) > Number("[[${model.amount}]]")) {
             Swal.fire({
@@ -138,49 +133,109 @@
             return;
         }
 
-        let isInCart = cartData?.find((item) => item.id === Number("[[${model.vegetableId}]]"))
-        if (isInCart === undefined) {
-            const quantity = Number($("#quantity").val())
-            const id = Number("[[${model.vegetableId}]]")
-            const image = "[[${model.image}]]"
-            const price = Number("[[${model.price}]]")
-            const subTotal = quantity * price
-            const name = "[[${model.name}]]"
+        const quantity = Number($("#quantity").val())
+        const vegetableId = Number("[[${model.vegetableId}]]")
+        const image = "[[${model.image}]]"
+        const price = Number("[[${model.price}]]")
+        const subTotal = quantity * price
+        const name = "[[${model.name}]]"
 
-            const data = {
-                quantity,
-                id,
-                image,
-                price,
-                subTotal,
-                name
-            }
-
-            cartData?.push(data)
-            localStorage.setItem("detailCart", JSON.stringify(cartData))
-            Swal.fire({
-                title: "Thành Công !",
-                text: "Thêm vào giỏ hàng thành công !",
-                icon: 'success',
-                timer: 1500
-            })
+        const data = {
+            quantity,
+            vegetableId,
+            image,
+            price,
+            subTotal,
+            name
         }
-        else {
-            const newCart = cartData?.filter((item) => {
-                if (item.id === Number("[[${model.vegetableId}]]")) {
-                    item.quantity += Number($("#quantity").val())
-                    item.subTotal = item.price * item.quantity
+
+        console.log(data)
+
+        $.ajax({
+            type: "POST",
+            url: '/san-pham/them-gio-hang',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                if (response.success === true) {
+                    Swal.fire({
+                        title: "Thành Công !",
+                        text: response.message,
+                        icon: 'success',
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        title: "Thất Bại",
+                        text: response.message,
+                        icon: "error",
+                        timer: 2000
+                    })
                 }
-                return item
-            })
-            localStorage.setItem("detailCart", JSON.stringify(newCart))
-            Swal.fire({
-                title: "Thành Công !",
-                icon: 'success',
-                text: "Thêm vào giỏ hàng thành công !",
-                timer: 1500
-            })
-        }
+            }
+        })
+
+
+        // Đây là sử dụng localStorage khi thêm sản phẩm
+
+        // let cartData = JSON.parse(localStorage.getItem("detailCart"))
+        // if (cartData === null) {
+        //     localStorage.setItem("detailCart", JSON.stringify([]))
+        //     cartData = []
+        // }
+
+        // if (Number($("#quantity").val()) > Number("[[${model.amount}]]")) {
+        //     Swal.fire({
+        //         title: "Lỗi",
+        //         icon: "error",
+        //         text: "Không được mua số lượng vượt quá số lượng còn lại"
+        //     })
+        //     return;
+        // }
+
+        // let isInCart = cartData?.find((item) => item.id === Number("[[${model.vegetableId}]]"))
+        // if (isInCart === undefined) {
+        //     const quantity = Number($("#quantity").val())
+        //     const id = Number("[[${model.vegetableId}]]")
+        //     const image = "[[${model.image}]]"
+        //     const price = Number("[[${model.price}]]")
+        //     const subTotal = quantity * price
+        //     const name = "[[${model.name}]]"
+
+        //     const data = {
+        //         quantity,
+        //         id,
+        //         image,
+        //         price,
+        //         subTotal,
+        //         name
+        //     }
+
+        //     cartData?.push(data)
+        //     localStorage.setItem("detailCart", JSON.stringify(cartData))
+        //     Swal.fire({
+        //         title: "Thành Công !",
+        //         text: "Thêm vào giỏ hàng thành công !",
+        //         icon: 'success',
+        //         timer: 1500
+        //     })
+        // }
+        // else {
+        //     const newCart = cartData?.filter((item) => {
+        //         if (item.id === Number("[[${model.vegetableId}]]")) {
+        //             item.quantity += Number($("#quantity").val())
+        //             item.subTotal = item.price * item.quantity
+        //         }
+        //         return item
+        //     })
+        //     localStorage.setItem("detailCart", JSON.stringify(newCart))
+        //     Swal.fire({
+        //         title: "Thành Công !",
+        //         icon: 'success',
+        //         text: "Thêm vào giỏ hàng thành công !",
+        //         timer: 1500
+        //     })
+        // }
 
     })
 </script>
